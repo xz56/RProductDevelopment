@@ -1,0 +1,38 @@
+---
+title: "RProductDevelopment_Leaflet"
+output: html_document
+keep_md: yes
+---
+
+```{r}
+##CALL THE LIBARAY
+library(knitr)
+library(leaflet)
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The data for this map is taken from the Boston Crime 2020 dataset which contains 493,443 crime records as made available by the Boston Police Department. The same is available here: https://data.boston.gov/dataset/6220d948-eae2-4e4b-8723-2dc8e67722a3/resource/12cb3883-56f5-47de-afa5-3b1cf61b257b/download/tmpf3rnr3kd.csv 
+
+## Reading Data
+
+Reading data from the given url and subsetting to extract 800 random samples out of the 493,443 records.  
+
+```{r, echo=TRUE, results=FALSE}
+data <- "https://data.boston.gov/dataset/6220d948-eae2-4e4b-8723-2dc8e67722a3/resource/12cb3883-56f5-47de-afa5-3b1cf61b257b/download/tmpf3rnr3kd.csv"
+df <- read.csv(url(data))
+df <- df[sample(nrow(df), 800), c(15,16)]
+```
+
+## Plotting Map
+
+The map below shows a clustered view of all the spots where crimes were recorded by the Boston Police Department in 2020.
+
+```{r Leaflet, echo=TRUE}
+df %>%
+  leaflet() %>%
+  addTiles() %>%
+  addMarkers(clusterOptions = markerClusterOptions())
+```
